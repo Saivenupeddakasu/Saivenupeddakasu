@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Expert System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: lightblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            background: #007BFF;
+            color: white;
+            padding: 12px;
+            border: none;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn:hover { background: #0056b3; }
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #result {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            background: #e9f5e9;
+            border-radius: 5px;
+            text-align: left;
+        }
+        .chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+        .chatbot button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .chatbox {
+            display: none;
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            width: 320px;
+            height: 400px;
+            background: white;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .nav {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .nav button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-left: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <button onclick="home()">Home</button>
+        <button onclick="contactUs()">Contact Us</button>
+    </div>
+    <div class="container" id="login-container">
+        <h2>Medical Expert System</h2>
+        <form onsubmit="return handleLogin(event)">
+            <input type="email" id="email" class="input-field" placeholder="Email" required>
+            <input type="password" id="password" class="input-field" placeholder="Password" required>
+            <button type="submit" class="btn">Login</button>
+        </form>
+    </div>
+
+    <div class="container" id="diagnosis-container" style="display: none;">
+        <h1>Enter Symptoms</h1>
+        <input type="text" id="symptoms" class="input-field" placeholder="e.g., fever, cough">
+        <button class="btn" onclick="diagnose()">Diagnose</button>
+        <div id="result"></div>
+    </div>
+
+    <div class="chatbot">
+        <button onclick="toggleChatbot()">💬</button>
+        <div class="chatbox" id="chatbox">
+            <h3>Chatbot</h3>
+            <p>How can I help you?</p>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('diagnosis-container').style.display = 'block';
+        }
+
+        function diagnose() {
+            let symptoms = document.getElementById("symptoms").value.toLowerCase();
+            let resultDiv = document.getElementById("result");
+
+            let diseases = {
+                "fever, cough": { disease: "Flu", treatment: "Paracetamol, rest, fluids", medicine: "Tamiflu" },
+                "headache": { disease: "Migraine", treatment: "Ibuprofen, hydration", medicine: "Sumatriptan" },
+                "sore throat, cough": { disease: "Strep Throat", treatment: "Antibiotics, throat lozenges", medicine: "Amoxicillin" },
+                "chest pain, shortness of breath": { disease: "Heart Attack", treatment: "Aspirin, emergency medical help", medicine: "Nitroglycerin" },
+                "nausea, vomiting, diarrhea": { disease: "Food Poisoning", treatment: "Hydration, anti-nausea medication", medicine: "Ondansetron" },
+                "joint pain, swelling": { disease: "Arthritis", treatment: "Pain relievers, physiotherapy", medicine: "Celecoxib" },
+                "rash, itching": { disease: "Allergic Reaction", treatment: "Antihistamines, avoiding allergens", medicine: "Loratadine" },
+                "high fever, stiff neck": { disease: "Meningitis", treatment: "Antibiotics, hospitalization", medicine: "Ceftriaxone" },
+                // Add more diseases up to 100...
+            };
+
+            let diagnosis = "Unknown disease. Please consult a doctor.";
+            let treatment = "";
+            let medicine = "";
+
+            for (let key in diseases) {
+                if (symptoms.includes(key)) {
+                    diagnosis = diseases[key].disease;
+                    treatment = diseases[key].treatment;
+                    medicine = diseases[key].medicine;
+                    break;
+                }
+            }
+
+            resultDiv.innerHTML = `<strong>Diagnosis:</strong> ${diagnosis}<br>
+                                   <strong>Treatment:</strong> ${treatment}<br>
+                                   <strong>Medicine:</strong> ${medicine}`;
+            resultDiv.style.display = "block";
+        }
+
+        function toggleChatbot() {
+            let chatbox = document.getElementById("chatbox");
+            chatbox.style.display = chatbox.style.display === "block" ? "none" : "block";
+        }
+
+        function home() {
+            alert("Home button clicked!");
+        }
+
+        function contactUs() {
+            alert("Contact Us button clicked!");
+        }
+    </script>
+</body>
+</html>
